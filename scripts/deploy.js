@@ -7,7 +7,7 @@ async function main() {
 
   let artifacts = await hre.artifacts.readArtifact("Faucet");
 
-  const provider = new ethers.providers.JsonRpcProvider(url);
+  const provider = new ethers.JsonRpcProvider(url);
 
   let privateKey = process.env.SEPOLIA_PRIVATE_KEY;
 
@@ -17,12 +17,10 @@ async function main() {
   let factory = new ethers.ContractFactory(artifacts.abi, artifacts.bytecode, wallet);
 
   let faucet = await factory.deploy();
+  console.log({faucet});
 
-  console.log("Faucet address:", faucet.address);
-
-  await faucet.deployed();
-
-  console.log(`Contract deployed to ${faucet.address}`);
+  // Wait for the deployment transaction to be mined
+  await faucet.waitForDeployment();
 }
 
 main()
